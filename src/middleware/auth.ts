@@ -9,7 +9,7 @@ export const jwtMiddleware = async (c: Context, next: Next) => {
   }
 
   try {
-    const payload = verify(token, process.env.JWT_SECRET as string);
+    const payload = verify(token, c.env.JWT_SECRET);
     c.set("user", payload);
     await next();
   } catch (error) {

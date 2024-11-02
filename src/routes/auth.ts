@@ -1,19 +1,18 @@
 import { Hono } from "hono";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "@/config/env";
 import { drizzle } from "drizzle-orm/d1";
 import { users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 
 type Bindings = {
   DB: D1Database;
+  JWT_SECRET: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.post("/login", async (c) => {
   const db = drizzle(c.env.DB);
-  const bcrypt = require("bcrypt");
 
   try {
     const { email, password } = await c.req.json();
@@ -23,20 +22,20 @@ app.post("/login", async (c) => {
       .where(eq(users.email, email))
       .get();
 
-    if (user && (await bcrypt.compare(password, user.passwordHash))) {
+    if (user && user.password === password) {
       const payload = {
-        sub: "user123",
+        userId: user.id.toString(),
         role: "admin",
         exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
       };
-      const token = jwt.sign(payload, JWT_SECRET);
+      const token = jwt.sign(payload, c.env.JWT_SECRET);
       return c.json({ token });
     }
 
     return c.text("Invalid credentials", 401);
   } catch (error) {
     console.error("Error fetching user data:", error);
-    return c.text("Internal server error", 500);
+    return c.text("Internal server error!", 500);
   }
 });
 

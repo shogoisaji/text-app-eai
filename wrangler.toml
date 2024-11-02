@@ -13,8 +13,6 @@ migrations_dir = "db/migrate"
 
 
 
-
-
 # [vars]
 # MY_VAR = "my-variable"
 
