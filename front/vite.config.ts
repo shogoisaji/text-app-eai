@@ -8,4 +8,7 @@ console.log(`Using base: ${base}`); // baseの値をログに出力
 export default defineConfig({
   plugins: [react()],
   base: base,
+  build: {
+    outDir: "dist", // ビルド出力先
+  },
 });
