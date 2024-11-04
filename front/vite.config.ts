@@ -4,5 +4,5 @@ import react from "@vitejs/plugin-react";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.GITHUB_PAGES ? "text-app-eai" : "./",
+  base: process.env.GITHUB_PAGES ? "/text-app-eai/" : "/", // スラッシュで始まるパスに修正
 });
