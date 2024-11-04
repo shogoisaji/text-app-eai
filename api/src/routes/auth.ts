@@ -10,7 +10,7 @@ type Bindings = {
   JWT_SECRET: string;
 };
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: Bindings; Variables: { user: JwtPayload } }>();
 
 app.post("/login", async (c) => {
   const db = drizzle(c.env.DB);
@@ -34,6 +34,7 @@ app.post("/login", async (c) => {
         "ja-JP",
         { timeZone: "Asia/Tokyo" }
       );
+      c.set("user", payload);
       await db.update(systems).set({ expire }).execute();
       return c.json({ token });
     }
