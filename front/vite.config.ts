@@ -1,8 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
+const base = process.env.GITHUB_PAGES ? "/text-app-eai/" : "/"; // baseの設定
+
+console.log(`Using base: ${base}`); // baseの値をログに出力
+
 export default defineConfig({
   plugins: [react()],
-  base: process.env.GITHUB_PAGES ? "/text-app-eai/" : "/", // スラッシュで始まるパスに修正
+  base: base,
 });
