@@ -15,12 +15,12 @@ app.post("/", async (c) => {
   const db = drizzle(c.env.DB);
 
   const apiKey = c.env.GEMINI_API_KEY;
-  const { text, pass } = await c.req.json();
+  const { text, chatPass } = await c.req.json();
   try {
     const system = await db.select().from(systems).get();
     if (!system) return c.text("Disable: system", 401);
     if (system.status !== 1) return c.text("Disable: system", 401);
-    if (system.chatPass !== pass) return c.text("wrong pass", 401);
+    if (system.chatPass !== chatPass) return c.text("wrong pass", 401);
 
     const translatedWord = await generate(text, apiKey);
     return c.json(translatedWord, 200);
