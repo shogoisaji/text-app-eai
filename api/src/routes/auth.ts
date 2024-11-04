@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import jwt from "jsonwebtoken";
 import { drizzle } from "drizzle-orm/d1";
-import { users } from "../../db/schema";
+import { systems, users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { JwtPayload } from "@/types/types";
 
@@ -30,6 +30,11 @@ app.post("/login", async (c) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
       };
       const token = jwt.sign(payload, c.env.JWT_SECRET);
+      const expire = new Date(Date.now() + 60 * 60 * 1000).toLocaleString(
+        "ja-JP",
+        { timeZone: "Asia/Tokyo" }
+      );
+      await db.update(systems).set({ expire }).execute();
       return c.json({ token });
     }
 

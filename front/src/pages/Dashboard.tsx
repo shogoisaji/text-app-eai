@@ -9,15 +9,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchStatus = async () => {
+      setStatus(0);
       try {
         const response = await api.get("/status");
         setStatus(response.data.status);
-        setIsEnabled(response.data.status === 1);
       } catch (error) {
         console.error("ステータスの取得に失敗しました:", error);
       }
     };
-
     fetchStatus();
   }, []);
 

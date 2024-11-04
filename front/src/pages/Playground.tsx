@@ -1,10 +1,30 @@
-import React, { useState } from "react";
-import api from "../lib/api"; // API呼び出し用のライブラリ
+import React, { useEffect, useState } from "react";
+import api from "../lib/api";
+import MarkdownDisplay from "../component/markdownDisplay";
+import { useNavigate } from "react-router-dom";
 
 const Playground = () => {
+  const navigate = useNavigate();
   const [inputText, setInputText] = useState<string>("");
   const [messages, setMessages] = useState<{ user: string; ai: string }[]>([]);
   const [pass, setPass] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const response = await api.get("/status");
+        if (response.data.status) {
+          console.log("Disable");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("ステータスの取得に失敗しました:", error);
+        navigate("/login");
+      }
+    };
+    fetchStatus();
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,13 +34,17 @@ const Playground = () => {
     setMessages((prev) => [...prev, { user: inputText, ai: "" }]);
 
     try {
-      // AIにテキストを送信
+      setLoading(true);
+
+      const text = inputText;
+      setInputText("");
+
       const response = await api.post("/generate", {
-        text: inputText,
+        text: text,
         chatPass: pass,
       });
-      const aiResponse = response.data.response;
-      console.log(aiResponse);
+
+      const aiResponse = response.data;
 
       // AIのレスポンスを追加
       setMessages((prev) => {
@@ -30,14 +54,13 @@ const Playground = () => {
       });
     } catch (error) {
       console.error("AIからのレスポンス取得に失敗しました:", error);
+    } finally {
+      setLoading(false);
     }
-
-    // 入力フィールドをクリア
-    setInputText("");
   };
 
   return (
-    <div className="chat-container">
+    <div className="chat-container bg-gray-700 pb-8">
       <input
         type="text"
         value={pass}
@@ -48,45 +71,38 @@ const Playground = () => {
       <div className="messages">
         {messages.map((msg, index) => (
           <div key={index} className="message">
-            <div
-              className="user-message"
-              style={{
-                backgroundColor: "#e0f7fa", // ユーザーのメッセージの背景色
-                borderRadius: "10px",
-                padding: "10px",
-                margin: "5px 0",
-                alignSelf: "flex-end", // ユーザーのメッセージを右寄せ
-              }}
-            >
-              あなた: {msg.user}
+            <div className="ai-message bg-sky-200 rounded-lg p-4 m-4 self-start">
+              YOU: {msg.user}
             </div>
+            {loading && (
+              <div className="p-12 text-red-400 font-bold text-4xl">
+                loading.....
+              </div>
+            )}
             {msg.ai && (
-              <div
-                className="ai-message"
-                style={{
-                  backgroundColor: "#f1f1f1", // AIのメッセージの背景色
-                  borderRadius: "10px",
-                  padding: "10px",
-                  margin: "5px 0",
-                  alignSelf: "flex-start", // AIのメッセージを左寄せ
-                }}
-              >
-                AI: {msg.ai}
+              <div className="ai-message bg-red-100 rounded-lg p-4 m-4 self-start">
+                AI: {<MarkdownDisplay content={msg.ai} />}
               </div>
             )}
           </div>
         ))}
       </div>
-      <form onSubmit={handleSubmit} className="input-form">
+      <form onSubmit={handleSubmit} className="input-form flex">
         <input
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="メッセージを入力..."
-          className="input-field"
+          className="input-field w-full m-4 p-3"
         />
-        <button type="submit" className="submit-button">
-          送信
+        <button
+          type="submit"
+          disabled={!!loading}
+          className={`submit-button rounded-md px-2 py-1  my-4 mr-4 ${
+            loading ? "bg-orange-200" : "bg-orange-300"
+          }`}
+        >
+          SUBMIT
         </button>
       </form>
     </div>
