@@ -9,4 +9,5 @@ export const users = sqliteTable("users", {
 
 export const systems = sqliteTable("systems", {
   status: integer().notNull(), // 1: Enable, 0: Disable
+  expire: text().notNull(),
 });

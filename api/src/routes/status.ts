@@ -15,7 +15,11 @@ app.get("/", async (c) => {
 
   try {
     const system = await db.select().from(systems).get();
-    const status = system ? system!.status : 0;
+    if (!system) return c.text("Internal server error!", 500);
+    const status = system ? system.status : 0;
+    if (system.expire < Date.now().toString()) {
+      return c.text("expired!", 401);
+    }
     return c.json({ status }, 200);
   } catch (error) {
     return c.text("Internal server error!", 500);
@@ -23,19 +27,19 @@ app.get("/", async (c) => {
 });
 
 app.post("/", async (c) => {
-  // const user: JwtPayload = c.get("user");
-  // if (!user) {
-  //   return c.text("User not found!", 401);
-  // }
-  // if (user.role !== "admin") {
-  //   return c.text(`no admin: ${user.role}`);
-  // }
+  const user: JwtPayload = c.get("user");
+  if (!user) {
+    return c.text("User not found!", 401);
+  }
+  if (user.role !== "admin") {
+    return c.text(`no admin: ${user.role}`);
+  }
 
-  const { status } = await c.req.json();
+  const { status, expire } = await c.req.json();
   const db = drizzle(c.env.DB);
 
   try {
-    await db.update(systems).set({ status }).execute();
+    await db.update(systems).set({ status, expire }).execute();
 
     const updatedSystem = await db.select().from(systems).get();
     return c.text(

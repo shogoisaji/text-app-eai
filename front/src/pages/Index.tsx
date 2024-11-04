@@ -4,6 +4,7 @@ import api from "../lib/api";
 
 const Index = () => {
   const [status, setStatus] = useState<number | null>(null);
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,6 +13,7 @@ const Index = () => {
         const response = await api.get("/status");
         setStatus(response.data.status);
       } catch (error) {
+        setError("ステータスの取得に失敗しました:");
         console.error("ステータスの取得に失敗しました:", error);
       }
     };
@@ -23,8 +25,11 @@ const Index = () => {
     navigate("/login");
   };
 
+  if (status === null) return;
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
+      {error}
       {status === 1 ? (
         <div>
           <h1 className="text-2xl">Enable</h1>
