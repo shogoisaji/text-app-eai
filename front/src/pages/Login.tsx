@@ -14,6 +14,7 @@ export default function Login() {
 
   useEffect(() => {
     const fetchStatus = async () => {
+      setStatus(0);
       try {
         const response = await api.get("/status");
         setStatus(response.data.status);
@@ -21,7 +22,6 @@ export default function Login() {
         console.error("ステータスの取得に失敗しました:", error);
       }
     };
-
     fetchStatus();
   }, []);
 

@@ -17,8 +17,10 @@ app.get("/", async (c) => {
     const system = await db.select().from(systems).get();
     if (!system) return c.text("Internal server error!", 500);
     const status = system ? system.status : 0;
-    const now = new Date(Date.now()).toISOString();
-    if (system.expire < now) {
+    const now = new Date(Date.now()).toLocaleString("ja-JP", {
+      timeZone: "Asia/Tokyo",
+    });
+    if (system.expire > now) {
       return c.text("expired!", 401);
     }
     return c.json({ status }, 200);

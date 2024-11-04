@@ -1,12 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../lib/api";
 import MarkdownDisplay from "../component/markdownDisplay";
+import { useNavigate } from "react-router-dom";
 
 const Playground = () => {
+  const navigate = useNavigate();
   const [inputText, setInputText] = useState<string>("");
   const [messages, setMessages] = useState<{ user: string; ai: string }[]>([]);
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const response = await api.get("/status");
+        if (response.data.status) {
+          console.log("Disable");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("ステータスの取得に失敗しました:", error);
+        navigate("/login");
+      }
+    };
+    fetchStatus();
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
