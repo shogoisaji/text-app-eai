@@ -1,0 +1,33 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # デフォルトブランチ名
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # 必要なNode.jsバージョン
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./front # /frontディレクトリ内で依存関係をインストール
+
+      - name: Build the project
+        run: npm run build
+        working-directory: ./front # /frontディレクトリ内でビルド
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./front/dist # ビルド後の出力ディレクトリ
