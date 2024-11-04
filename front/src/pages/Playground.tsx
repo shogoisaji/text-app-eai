@@ -14,8 +14,8 @@ const Playground = () => {
     const fetchStatus = async () => {
       try {
         const response = await api.get("/status");
-        if (response.data.status) {
-          console.log("Disable");
+        if (response.data.status === 0) {
+          console.log("Disable", response.data.status);
           navigate("/login");
         }
       } catch (error) {
