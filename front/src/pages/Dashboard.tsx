@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 import api from "../lib/api";
 
 const Dashboard = () => {
-  const [status, setStatus] = useState<number | null>(null);
-  const [isEnabled, setIsEnabled] = useState<boolean>(false); // トグル用の状態を追加
+  const [status, setStatus] = useState<number>(0);
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStatus = async () => {
-      setStatus(0);
       try {
         const response = await api.get("/status");
         setStatus(response.data.status);
+        setIsEnabled(response.data.status === 1);
       } catch (error) {
         console.error("ステータスの取得に失敗しました:", error);
       }
