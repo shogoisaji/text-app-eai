@@ -20,7 +20,7 @@ app.get("/", async (c) => {
     const now = new Date(Date.now()).toLocaleString("ja-JP", {
       timeZone: "Asia/Tokyo",
     });
-    if (system.expire > now) {
+    if (system.expire < now) {
       return c.text("expired!", 401);
     }
     return c.json({ status }, 200);
