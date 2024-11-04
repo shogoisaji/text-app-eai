@@ -4,6 +4,7 @@ import api from "../lib/api"; // API呼び出し用のライブラリ
 const Playground = () => {
   const [inputText, setInputText] = useState<string>("");
   const [messages, setMessages] = useState<{ user: string; ai: string }[]>([]);
+  const [pass, setPass] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,7 +15,10 @@ const Playground = () => {
 
     try {
       // AIにテキストを送信
-      const response = await api.post("/generate", { text: inputText });
+      const response = await api.post("/generate", {
+        text: inputText,
+        chatPass: pass,
+      });
       const aiResponse = response.data.response;
       console.log(aiResponse);
 
@@ -34,6 +38,13 @@ const Playground = () => {
 
   return (
     <div className="chat-container">
+      <input
+        type="text"
+        value={pass}
+        onChange={(e) => setPass(e.target.value)}
+        placeholder="Pass"
+        className="input-field"
+      />
       <div className="messages">
         {messages.map((msg, index) => (
           <div key={index} className="message">
