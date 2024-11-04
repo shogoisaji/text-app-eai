@@ -8,6 +8,7 @@ on:
 permissions:
   id-token: write # id-tokenの書き込み権限を付与
   contents: read # コンテンツの読み取り権限を付与
+  pages: write # Pagesの書き込み権限を付与
 
 jobs:
   build:
