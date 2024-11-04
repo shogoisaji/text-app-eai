@@ -1,5 +1,6 @@
 {
-  "name": "my-auth-app",
+  "name": "text-app-eai",
+  "homepage": "https://shogoisaji.github.io/text-app-eai/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
