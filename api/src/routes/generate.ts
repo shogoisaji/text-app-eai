@@ -11,17 +11,16 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.post("/eai", async (c) => {
+app.post("/", async (c) => {
   const db = drizzle(c.env.DB);
 
   const apiKey = c.env.GEMINI_API_KEY;
   const { text, pass } = await c.req.json();
-  if (!pass || pass !== c.env.PASS) return c.text("Disable: pass", 401);
   try {
     const system = await db.select().from(systems).get();
-    if (system?.status !== 1) {
-      return c.text("Disable: system", 401);
-    }
+    if (!system) return c.text("Disable: system", 401);
+    if (system.status !== 1) return c.text("Disable: system", 401);
+    if (system.chatPass !== pass) return c.text("wrong pass", 401);
 
     const translatedWord = await generate(text, apiKey);
     return c.json(translatedWord, 200);
