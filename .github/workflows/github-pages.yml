@@ -33,7 +33,7 @@ jobs:
           GITHUB_PAGES: true # GITHUB_PAGES環境変数を設定
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           path: ./front/dist # ビルド後の出力ディレクトリ
 
