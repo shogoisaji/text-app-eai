@@ -9,6 +9,7 @@
     "migrations:apply": "NO_D1_WARNING=true wrangler d1 migrations apply text-app-eai-db"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "argon2": "^0.41.1",
     "aws-sdk": "^2.1691.0",
     "bcrypt": "^5.1.1",

@@ -1,4 +1,4 @@
-name = "my-app"
+name = "text-app-eai"
 main = "src/index.ts"
 compatibility_date = "2024-10-21"
 compatibility_flags = [ "nodejs_compat" ]

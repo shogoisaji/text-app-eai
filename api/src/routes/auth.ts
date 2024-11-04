@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { drizzle } from "drizzle-orm/d1";
 import { users } from "../../db/schema";
 import { eq } from "drizzle-orm";
+import { JwtPayload } from "@/types/types";
 
 type Bindings = {
   DB: D1Database;
@@ -23,9 +24,9 @@ app.post("/login", async (c) => {
       .get();
 
     if (user && user.password === password) {
-      const payload = {
+      const payload: JwtPayload = {
         userId: user.id.toString(),
-        role: "admin",
+        role: user.role,
         exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
       };
       const token = jwt.sign(payload, c.env.JWT_SECRET);

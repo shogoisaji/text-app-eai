@@ -174,3 +174,5 @@ dist
 memo.md
 
 migrate
+
+seed.sql
