@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const base = process.env.GITHUB_PAGES ? "/text-app-eai/front/" : "/"; // baseの設定
+const base = process.env.GITHUB_PAGES ? "/text-app-eai/" : "/"; // baseの設定
 
 console.log(`Using base: ${base}`); // baseの値をログに出力
 
