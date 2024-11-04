@@ -5,6 +5,7 @@ import { useAuthStore } from "./stores/auth";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Index from "./pages/Index";
+import Playground from "./pages/Playground";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/playground" element={<Playground />} />
           <Route
             path="/dashboard"
             element={

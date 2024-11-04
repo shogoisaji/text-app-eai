@@ -28,11 +28,11 @@ app.post("/", async (c) => {
     return c.text(`no admin: ${role}`);
   }
 
-  const { status } = await c.req.json();
+  const { status, expire } = await c.req.json();
   const db = drizzle(c.env.DB);
 
   try {
-    await db.update(systems).set({ status }).execute();
+    await db.update(systems).set({ status, expire }).execute();
 
     const updatedSystem = await db.select().from(systems).get();
     return c.text(
