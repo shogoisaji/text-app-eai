@@ -40,8 +40,11 @@ app.post("/", async (c) => {
     if (role !== "admin") {
       return c.text(`no admin: ${role}`);
     }
-    const { status, expire } = await c.req.json();
+    const { status } = await c.req.json();
     const db = drizzle(c.env.DB);
+
+    const expire =
+      status === 1 ? new Date(Date.now() + 60 * 60 * 1000).toISOString() : "";
 
     try {
       await db.update(systems).set({ status, expire }).execute();

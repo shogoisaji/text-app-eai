@@ -54,30 +54,36 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6 rounded-lg shadow-lg">
-      <div className="bg-white p-4 rounded-lg shadow-md">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6">
+      <h1
+        className={`text-3xl text-center font-bold ${
+          status === 1 ? "text-red-500" : "text-black"
+        }`}
+      >
+        {status === 1 ? "ACTIVE" : "INACTIVE"}
+      </h1>
+      <div
+        className={`bg-white p-4 my-8 rounded-lg shadow-2xl ${
+          status === 1 ? "shadow-red-600" : "shadow-black"
+        }`}
+      >
         <h1 className="text-3xl font-bold text-center mb-4">STATUS</h1>
-        <label className="flex items-center mb-4">
+        <label className="flex justify-center items-center mb-4">
           <input
             type="checkbox"
             checked={isEnabled}
             onChange={handleToggleChange}
             className="form-checkbox h-5 w-5 text-blue-600"
           />
-          <span className="ml-2 text-lg">有効</span>
+          <span className="ml-2 text-lg">ACTIVE</span>
         </label>
         <button
           onClick={handleSubmit}
-          className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200"
+          className="w-full mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-blue-700 transition duration-200"
         >
-          設定を切り替える
+          CHANGE STATUS
         </button>
       </div>
-      <h1 className="text-2xl text-center mt-4">
-        {status === 1
-          ? "このアプリケーションが使えます。"
-          : "アプリケーションは利用できません。"}
-      </h1>
       <div className="flex space-x-4 mt-4">
         <button
           onClick={handleLoginRedirect}
@@ -87,7 +93,7 @@ const Dashboard = () => {
         </button>
         <button
           onClick={handleTopRedirect}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200"
+          className="px-4 py-2 bg-green-700 text-white rounded hover:bg-blue-700 transition duration-200"
         >
           PLAYGROUND
         </button>

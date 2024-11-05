@@ -33,10 +33,15 @@ export default function Login() {
       navigate("/dashboard");
     },
   });
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     loginMutation.mutate({ email, password });
+  };
+
+  const handleLogout = () => {
+    useAuthStore.getState().clearAuth();
+
+    navigate("/login");
   };
 
   return (
@@ -102,23 +107,31 @@ export default function Login() {
           </form>
 
           <div className="flex justify-between">
-            {user?.role === "admin" && (
-              <button
-                onClick={() => navigate("/dashboard")}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                DASHBOARD
-              </button>
-            )}
             {!!status && (
               <button
                 onClick={() => navigate("/playground")}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                className="mt-4 px-4 py-2 bg-green-700 text-white rounded"
               >
                 PLAYGROUND
               </button>
             )}
+            {user?.role === "admin" && (
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="mt-4 px-4 py-2 bg-sky-700 text-white rounded"
+              >
+                DASHBOARD
+              </button>
+            )}
           </div>
+        </div>
+        <div className="flex justify-center">
+          <button
+            onClick={handleLogout}
+            className="mt-4 px-4 py-2 border-2 border-blue-200 text-blue-200 font-bold rounded-lg"
+          >
+            LOGOUT
+          </button>
         </div>
       </div>
     </div>
