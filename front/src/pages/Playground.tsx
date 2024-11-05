@@ -81,6 +81,7 @@ const Playground = () => {
       });
     } catch (error) {
       console.error("レスポンス取得に失敗しました:", error);
+      navigate("/login");
     } finally {
       setLoading(false);
     }
