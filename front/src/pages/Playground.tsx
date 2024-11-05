@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import api from "../lib/api";
-import MarkdownDisplay from "../component/markdownDisplay";
 import { useNavigate } from "react-router-dom";
+import MarkdownDisplay from "../component/markdownDisplay";
 
 const Playground = () => {
   const navigate = useNavigate();
@@ -156,27 +156,16 @@ const Playground = () => {
         <textarea
           ref={textareaRef}
           placeholder="メッセージを入力..."
-<<<<<<< Updated upstream
-          className="p-4 m-4"
-          onInput={adjustHeight}
-          onChange={(e) => setInputText(e.target.value)}
-          style={{ width: "100%", resize: "none", overflow: "hidden" }}
-=======
           className="p-2 m-4 w-full"
           onInput={adjustHeight}
           onChange={(e) => setInputText(e.target.value)}
           // style={{ width: "100%", resize: "none", overflow: "hidden" }}
->>>>>>> Stashed changes
         />
         <div>
           <button
             type="submit"
             disabled={!!loading}
-<<<<<<< Updated upstream
-            className={`submit-button rounded-md px-2 py-2  my-4 mr-4 ${
-=======
             className={`font-bold text-white rounded-md px-2 py-2  my-4 mr-4 ${
->>>>>>> Stashed changes
               loading ? "bg-orange-200" : "bg-orange-300"
             }`}
           >
