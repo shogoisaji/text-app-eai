@@ -30,9 +30,7 @@ app.post("/login", async (c) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
       };
       const token = jwt.sign(payload, c.env.JWT_SECRET);
-      const expire = new Date(Date.now() + 60 * 60 * 1000).toISOString();
       c.set("user", payload);
-      await db.update(systems).set({ expire }).execute();
       return c.json({
         token,
         user: {

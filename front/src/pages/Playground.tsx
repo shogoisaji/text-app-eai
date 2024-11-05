@@ -106,7 +106,7 @@ const Playground = () => {
   return (
     <div className="pb-8">
       <div className="flex justify-between p-3">
-        <div className="flex flex-row items-start">
+        <div className="flex flex-col md:flex-row items-start">
           <div className="px-4 py-2 mr-6 bg-yellow-200 rounded-md">
             {timeLeft} m
           </div>
@@ -140,11 +140,10 @@ const Playground = () => {
         ))}
       </div>
       {loading && (
-        <div className="p-12 text-red-400 font-bold text-4xl">loading.....</div>
+        <div className="p-8 text-red-400 font-bold text-4xl">loading.....</div>
       )}
       <form onSubmit={handleSubmit} className="input-form flex">
-        <input
-          type="text"
+        <textarea
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="メッセージを入力..."
