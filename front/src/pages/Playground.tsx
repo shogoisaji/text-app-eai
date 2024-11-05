@@ -13,6 +13,11 @@ const Playground = () => {
   const [status, setStatus] = useState(0);
   const [loading, setLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedModel, setSelectedModel] = useState("flash");
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedModel(event.target.value);
+  };
 
   const adjustHeight = () => {
     const textarea = textareaRef.current;
@@ -77,6 +82,7 @@ const Playground = () => {
       const response = await api.post("/generate", {
         text: text,
         chatPass: pass,
+        model: selectedModel,
       });
 
       const aiResponse = response.data;
@@ -125,14 +131,27 @@ const Playground = () => {
             LOGIN
           </button>
         </div>
-        <div>
-          <input
-            type="text"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
-            placeholder=" Pass"
-            className="input-field rounded-sm p-1"
-          />
+        <div className="flex flex-col items-end justify-start">
+          <div className="mb-4">
+            <input
+              type="text"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              placeholder=" Pass"
+              className="input-field rounded-sm p-1"
+            />
+          </div>
+          <div>
+            <select
+              id="select-model"
+              value={selectedModel}
+              onChange={handleChange}
+              className="px-2 py-1"
+            >
+              <option value="flash">Flash</option>
+              <option value="pro">Pro</option>
+            </select>
+          </div>
         </div>
       </div>
       <div className="messages">
@@ -152,14 +171,14 @@ const Playground = () => {
       {loading && (
         <div className="p-8 text-red-400 font-bold text-4xl">loading.....</div>
       )}
-      <form onSubmit={handleSubmit} className="input-form flex">
+      <form onSubmit={handleSubmit} className="input-form flex items-end">
         <textarea
           ref={textareaRef}
           placeholder="メッセージを入力..."
           className="p-2 m-4 w-full"
           onInput={adjustHeight}
+          value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          // style={{ width: "100%", resize: "none", overflow: "hidden" }}
         />
         <div>
           <button
