@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../lib/api";
+import { useAuthStore } from "../stores/auth";
 
 const Dashboard = () => {
   const [status, setStatus] = useState<number>(0);
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const navigate = useNavigate();
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -34,7 +36,16 @@ const Dashboard = () => {
   const handleSubmit = async () => {
     try {
       const newStatus = isEnabled ? 1 : 0;
-      const res = await api.post("/status", { status: newStatus });
+      if (!token) {
+        // トークンが存在しない場合はログイン画面にリダイレクト
+        navigate("/login");
+        return;
+      }
+      const res = await api.post(
+        "/status",
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setStatus(newStatus);
       console.log("成功", res);
     } catch (error) {

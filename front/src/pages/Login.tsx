@@ -11,6 +11,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState(0);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -23,7 +24,7 @@ export default function Login() {
       }
     };
     fetchStatus();
-  }, []);
+  }, [user]);
 
   const loginMutation = useMutation({
     mutationFn: authApi.login,
@@ -39,7 +40,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col justify-center py-12 px-6 lg:px-8">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -99,22 +100,25 @@ export default function Login() {
               </button>
             </div>
           </form>
-          {!!status && (
-            <div className="flex justify-between">
+
+          <div className="flex justify-between">
+            {user?.role === "admin" && (
               <button
                 onClick={() => navigate("/dashboard")}
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
               >
                 DASHBOARD
               </button>
+            )}
+            {!!status && (
               <button
                 onClick={() => navigate("/playground")}
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
               >
                 PLAYGROUND
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
