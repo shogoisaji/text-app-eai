@@ -30,13 +30,17 @@ app.post("/login", async (c) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
       };
       const token = jwt.sign(payload, c.env.JWT_SECRET);
-      const expire = new Date(Date.now() + 60 * 60 * 1000).toLocaleString(
-        "ja-JP",
-        { timeZone: "Asia/Tokyo" }
-      );
+      const expire = new Date(Date.now() + 60 * 60 * 1000).toISOString();
       c.set("user", payload);
       await db.update(systems).set({ expire }).execute();
-      return c.json({ token });
+      return c.json({
+        token,
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        },
+      });
     }
 
     return c.text("Invalid credentials", 401);
