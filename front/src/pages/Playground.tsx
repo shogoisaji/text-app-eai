@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import api from "../lib/api";
 import MarkdownDisplay from "../component/markdownDisplay";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,14 @@ const Playground = () => {
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [status, setStatus] = useState(0);
   const [loading, setLoading] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustHeight = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    textarea.style.height = "auto"; // style プロパティは HTMLTextAreaElement に存在します
+    textarea.style.height = `${textarea.scrollHeight}px`; // scrollHeight プロパティは HTMLTextAreaElement に存在します
+  };
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -107,7 +115,7 @@ const Playground = () => {
     <div className="pb-8">
       <div className="flex justify-between p-3">
         <div className="flex flex-col md:flex-row items-start">
-          <div className="px-4 py-2 mr-6 bg-yellow-200 rounded-md">
+          <div className="px-4 py-2 mr-6 md:mb-0 mb-2 text-white bg-lime-600 rounded">
             {timeLeft} m
           </div>
           <button
@@ -117,13 +125,15 @@ const Playground = () => {
             LOGIN
           </button>
         </div>
-        <input
-          type="text"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-          placeholder=" Pass"
-          className="input-field rounded-sm p-1"
-        />
+        <div>
+          <input
+            type="text"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+            placeholder=" Pass"
+            className="input-field rounded-sm p-1"
+          />
+        </div>
       </div>
       <div className="messages">
         {messages.map((msg, index) => (
@@ -144,20 +154,24 @@ const Playground = () => {
       )}
       <form onSubmit={handleSubmit} className="input-form flex">
         <textarea
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
+          ref={textareaRef}
           placeholder="メッセージを入力..."
-          className="input-field w-full m-4 p-3"
+          className="p-4 m-4"
+          onInput={adjustHeight}
+          onChange={(e) => setInputText(e.target.value)}
+          style={{ width: "100%", resize: "none", overflow: "hidden" }}
         />
-        <button
-          type="submit"
-          disabled={!!loading}
-          className={`submit-button rounded-md px-2 py-1  my-4 mr-4 ${
-            loading ? "bg-orange-200" : "bg-orange-300"
-          }`}
-        >
-          SUBMIT
-        </button>
+        <div>
+          <button
+            type="submit"
+            disabled={!!loading}
+            className={`submit-button rounded-md px-2 py-2  my-4 mr-4 ${
+              loading ? "bg-orange-200" : "bg-orange-300"
+            }`}
+          >
+            SUBMIT
+          </button>
+        </div>
       </form>
     </div>
   );
