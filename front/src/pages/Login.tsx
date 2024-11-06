@@ -29,7 +29,7 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      setAuth(data.token, data.user);
+      setAuth(data.token, data.user, data.exp);
       navigate("/dashboard");
     },
   });

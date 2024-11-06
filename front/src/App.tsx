@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Index from "./pages/Index";
 import Playground from "./pages/Playground";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
@@ -15,12 +16,18 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
-  const user = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      useAuthStore.getState().checkEnabled();
+    }, 1000); // 1秒ごとに更新
+
+    return () => clearInterval(interval); // クリーンアップ
+  }, []);
 
   return (
-    <div
-      className={`p-2 ${user?.role === "admin" ? "bg-red-500" : "ba-black"}`}
-    >
+    <div className={`p-2 ${token ? "bg-red-500" : "ba-black"}`}>
       <div className="bg-gray-700 min-h-screen rounded-lg">
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>

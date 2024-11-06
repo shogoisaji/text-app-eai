@@ -50,6 +50,7 @@ export interface User {
 export interface LoginResponse {
   token: string;
   user: User;
+  exp: string;
 }
 
 export const authApi = {

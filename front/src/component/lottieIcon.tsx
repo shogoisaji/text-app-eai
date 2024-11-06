@@ -5,7 +5,7 @@ export const LottieIcon = ({ isActive }: { isActive: boolean }) => {
   return (
     <div className="">
       <Player
-        autoplay={isActive}
+        autoplay
         loop
         src={activeAnimation}
         style={{

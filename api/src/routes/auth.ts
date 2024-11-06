@@ -24,10 +24,13 @@ app.post("/login", async (c) => {
       .get();
 
     if (user && user.password === password) {
+      // Token expires in 5 minutes
+      const expDate = Math.floor(Date.now() / 1000) + 60 * 5;
+
       const payload: JwtPayload = {
         userId: user.id.toString(),
         role: user.role,
-        exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
+        exp: expDate,
       };
       const token = jwt.sign(payload, c.env.JWT_SECRET);
       c.set("user", payload);
@@ -38,6 +41,7 @@ app.post("/login", async (c) => {
           email: user.email,
           role: user.role,
         },
+        exp: new Date(expDate).toISOString(),
       });
     }
 
