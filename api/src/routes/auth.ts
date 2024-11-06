@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import jwt from "jsonwebtoken";
 import { drizzle } from "drizzle-orm/d1";
-import { systems, users } from "../../db/schema";
+import { users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { JwtPayload } from "@/types/types";
 
@@ -41,7 +41,7 @@ app.post("/login", async (c) => {
           email: user.email,
           role: user.role,
         },
-        exp: new Date(expDate).toISOString(),
+        exp: new Date(expDate * 1000).toISOString(),
       });
     }
 
