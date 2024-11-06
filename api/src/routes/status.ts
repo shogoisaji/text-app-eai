@@ -43,8 +43,11 @@ app.post("/", async (c) => {
     const { status } = await c.req.json();
     const db = drizzle(c.env.DB);
 
+    //４時間
     const expire =
-      status === 1 ? new Date(Date.now() + 60 * 60 * 1000).toISOString() : "";
+      status === 1
+        ? new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString()
+        : "";
 
     try {
       await db.update(systems).set({ status, expire }).execute();
