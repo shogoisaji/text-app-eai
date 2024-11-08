@@ -21,6 +21,7 @@ app.post("/", async (c) => {
 
   const apiKey = c.env.GEMINI_API_KEY;
   const { text, chatPass, model } = await c.req.json();
+  const bodyText = await c.req.text();
   try {
     const system = await db.select().from(systems).get();
     if (!system) return c.text("Disable: system", 401);
@@ -29,7 +30,7 @@ app.post("/", async (c) => {
     const modelValue = MODELS[model];
     console.log("model", modelValue);
 
-    const translatedWord = await generate(text, apiKey, modelValue);
+    const translatedWord = await generate(bodyText ?? text, apiKey, modelValue);
     return c.json(translatedWord, 200);
   } catch (error) {
     return c.json({ error }, 500);
